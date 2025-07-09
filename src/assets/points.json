@@ -94,6 +94,18 @@
                 "type": "Point",
                 "coordinates": [77.074944, 43.133556]
             }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "Гераниевая поляна",
+                "description": ""
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [77.004997, 43.009634]
+            }
         }
     ]
 }

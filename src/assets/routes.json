@@ -916,7 +916,7 @@
             "type": "Feature",
             "properties": {
                 "type": "route",
-                "title": "Объезд вдоль пр. Достык",
+                "name": "Объезд вдоль пр. Достык",
                 "description": "Хороший проезд вместо пробок на Достыке"
             },
             "geometry": {
