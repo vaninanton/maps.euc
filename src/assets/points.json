@@ -130,6 +130,18 @@
                 "type": "Point",
                 "coordinates": [77.06044, 43.016882]
             }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "Мынжылкы",
+                "description": ""
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [77.079339, 43.08449]
+            }
         }
     ]
 }
