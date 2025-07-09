@@ -3,7 +3,7 @@ import { ref, watch } from 'vue'
 import FeatureTypes from '../helpers/FeatureTypes'
 import * as L from 'leaflet'
 
-const emit = defineEmits(['select', 'cancel'])
+const emit = defineEmits(['select', 'cancel', 'save'])
 
 const props = defineProps({
     visible: {
@@ -43,9 +43,6 @@ watch(() => props.layer, (newLayer) => {
 })
 const title = ref('')
 const description = ref('')
-const showTelegramLink = ref(false)
-const telegramUrl = ref('')
-const countdown = ref(10)
 
 const handleSelect = async () => {
     console.log('handleSelect called')
@@ -71,40 +68,33 @@ const handleSelect = async () => {
     }
 
     const geoJsonData = props.layer.toGeoJSON()
-    geoJsonData.properties = props.layer.feature.properties
+    geoJsonData.properties = {
+        type: selectedType.value,
+        title: title.value || '',
+        description: description.value || ''
+    }
 
     console.log('Сформированный GeoJSON:', geoJsonData)
 
-    // Отправляем в Telegram
-    await sendToTelegram(geoJsonData)
-}
+    // Определяем тип объекта для сообщения
+    const typeText = selectedType.value === FeatureTypes.POINT ? 'точку' :
+                    selectedType.value === FeatureTypes.SOCKET ? 'розетку' :
+                    'маршрут'
 
-const sendToTelegram = async (geoJsonData) => {
-    try {
-        const message = JSON.stringify(geoJsonData, null, 2)
-
-        const encodedMessage = encodeURIComponent(message)
-
-        telegramUrl.value = `https://t.me/vanton?text=${encodedMessage}`
-
-        window.open(telegramUrl.value, '_blank')
-
-        showTelegramLink.value = true
-        countdown.value = 10
-
-        const timer = setInterval(() => {
-            countdown.value--
-            if (countdown.value <= 0) {
-                clearInterval(timer)
-                emit('select')
-                resetForm()
-            }
-        }, 1000)
-    } catch (error) {
-        console.error('Ошибка при создании ссылки Telegram:', error)
-        alert('Ошибка при создании ссылки. Проверьте консоль.')
+    // Создаем данные для share
+    const shareData = {
+        type: selectedType.value,
+        typeText: typeText,
+        title: title.value || '',
+        description: description.value || '',
+        geoJson: geoJsonData
     }
+
+    // Передаем данные родительскому компоненту
+    emit('save', shareData)
+    resetForm()
 }
+
 
 const handleCancel = () => {
     emit('cancel')
@@ -115,9 +105,6 @@ const resetForm = () => {
     selectedType.value = FeatureTypes.ROUTE
     title.value = ''
     description.value = ''
-    showTelegramLink.value = false
-    telegramUrl.value = ''
-    countdown.value = 10
 }
 </script>
 
@@ -163,14 +150,8 @@ const resetForm = () => {
                 </div>
             </div>
 
-            <div v-if="showTelegramLink" class="telegram-link-info">
-                <p>Если Telegram не открылся автоматически, откройте ссылку вручную:</p>
-                <a :href="telegramUrl" target="_blank" class="telegram-link">Открыть в Telegram</a>
-                <p class="countdown">Визард закроется через: <strong>{{ countdown }}</strong> сек.</p>
-            </div>
-
             <div class="wizard-buttons">
-                <button @click="handleSelect" class="btn-primary" :disabled="showTelegramLink">Отправить</button>
+                <button @click="handleSelect" class="btn-primary">Сохранить</button>
                 <button @click="handleCancel" class="btn-secondary">Отмена</button>
             </div>
         </div>
@@ -281,49 +262,4 @@ const resetForm = () => {
     background: #da190b;
 }
 
-.btn-primary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.telegram-link-info {
-    background: #f0f0f0;
-    padding: 15px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.telegram-link-info p {
-    margin: 5px 0;
-}
-
-.telegram-link {
-    color: #0088cc;
-    text-decoration: none;
-    font-weight: bold;
-    display: inline-block;
-    margin: 10px 0;
-}
-
-.telegram-link:hover {
-    text-decoration: underline;
-}
-
-.hint {
-    font-size: 12px;
-    color: #666;
-    font-style: italic;
-}
-
-.countdown {
-    font-size: 14px;
-    color: #333;
-    margin-top: 10px;
-}
-
-.countdown strong {
-    color: #0088cc;
-    font-size: 18px;
-}
 </style>
