@@ -101,13 +101,9 @@ const handleClose = () => {
                     <p>{{ shareData.description }}</p>
                 </div>
 
-                <div class="info-section">
-                    <h3>Данные GeoJSON:</h3>
-                    <pre class="json-preview">{{ formattedJson }}</pre>
-                </div>
-
                 <div class="share-link-section">
                     <h3>Ссылка для публикации:</h3>
+                    <p>Отправь <a href="https://t.me/vanton" target="_blank">@vanton</a> и мы её добавим!</p>
                     <div class="link-container">
                         <input
                             type="text"
@@ -119,6 +115,11 @@ const handleClose = () => {
                             📋 Копировать
                         </button>
                     </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>Данные GeoJSON:</h3>
+                    <pre class="json-preview">{{ formattedJson }}</pre>
                 </div>
 
                 <div v-if="showTelegramLink" class="telegram-countdown">
@@ -224,16 +225,17 @@ const handleClose = () => {
     border-radius: 6px;
     padding: 12px;
     overflow-x: auto;
-    max-height: 200px;
+    max-height: 100px;
     font-size: 12px;
     line-height: 1.4;
     color: #333;
 }
 
 .share-link-section {
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+}
+.share-link-section h3 {
+    margin-top: 0;
 }
 
 .link-container {
