@@ -17,9 +17,9 @@ import generateGeoJson from '../helpers/GenerateGeoJson'
 import createPopupForFeature from '../helpers/CreatePopupForFeature'
 import FeatureTypeWizard from './FeatureTypeWizard.vue'
 import FeatureShare from './FeatureShare.vue'
-import markerIconUrl from "leaflet/dist/images/marker-icon.png";
-import markerIconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
-import markerShadowUrl from "leaflet/dist/images/marker-shadow.png";
+import markerIconUrl from 'leaflet/dist/images/marker-icon.png'
+import markerIconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png'
+import markerShadowUrl from 'leaflet/dist/images/marker-shadow.png'
 
 const showWizard = ref(false)
 const currentLayer = ref(null)
@@ -64,10 +64,10 @@ const handleShareClose = () => {
 onMounted(function () {
     map = L.map('map').setView([43.226807, 76.904848], 12)
 
-    L.Icon.Default.prototype.options.iconUrl = markerIconUrl;
-    L.Icon.Default.prototype.options.iconRetinaUrl = markerIconRetinaUrl;
-    L.Icon.Default.prototype.options.shadowUrl = markerShadowUrl;
-    L.Icon.Default.imagePath = "";
+    L.Icon.Default.prototype.options.iconUrl = markerIconUrl
+    L.Icon.Default.prototype.options.iconRetinaUrl = markerIconRetinaUrl
+    L.Icon.Default.prototype.options.shadowUrl = markerShadowUrl
+    L.Icon.Default.imagePath = ''
 
     // Проверяем, есть ли параметр share в URL
     const hash = window.location.hash
@@ -192,11 +192,7 @@ onBeforeUnmount(() => {
         @save="handleWizardSave"
         @cancel="handleWizardCancel"
     />
-    <FeatureShare
-        :visible="showShare"
-        :shareData="shareData"
-        @close="handleShareClose"
-    />
+    <FeatureShare :visible="showShare" :shareData="shareData" @close="handleShareClose" />
 </template>
 
 <style scoped>

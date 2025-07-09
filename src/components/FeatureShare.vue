@@ -4,12 +4,12 @@ import { ref, computed, watch } from 'vue'
 const props = defineProps({
     visible: {
         type: Boolean,
-        default: false
+        default: false,
     },
     shareData: {
         type: Object,
-        default: null
-    }
+        default: null,
+    },
 })
 
 const emit = defineEmits(['close'])
@@ -24,11 +24,15 @@ const formattedJson = computed(() => {
 })
 
 // Следим за изменением shareData
-watch(() => props.shareData, (newData) => {
-    if (newData && props.visible) {
-        generateShareUrl()
-    }
-}, { immediate: true })
+watch(
+    () => props.shareData,
+    (newData) => {
+        if (newData && props.visible) {
+            generateShareUrl()
+        }
+    },
+    { immediate: true },
+)
 
 const generateShareUrl = () => {
     try {
@@ -67,11 +71,14 @@ const shareToTelegram = () => {
 }
 
 const copyShareLink = () => {
-    navigator.clipboard.writeText(shareUrl.value).then(() => {
-        alert('Ссылка скопирована в буфер обмена!')
-    }).catch(err => {
-        console.error('Ошибка при копировании:', err)
-    })
+    navigator.clipboard
+        .writeText(shareUrl.value)
+        .then(() => {
+            alert('Ссылка скопирована в буфер обмена!')
+        })
+        .catch((err) => {
+            console.error('Ошибка при копировании:', err)
+        })
 }
 
 const handleClose = () => {
@@ -86,14 +93,20 @@ const handleClose = () => {
     <div v-if="visible && shareData" class="share-overlay">
         <div class="share-modal">
             <div class="share-header">
-                <h2>{{ shareData.typeText ? `${shareData.typeText.charAt(0).toUpperCase() + shareData.typeText.slice(1)} создан(а)` : 'Объект создан' }}</h2>
+                <h2>
+                    {{
+                        shareData.typeText
+                            ? `${shareData.typeText.charAt(0).toUpperCase() + shareData.typeText.slice(1)} создан(а)`
+                            : 'Объект создан'
+                    }}
+                </h2>
                 <button @click="handleClose" class="close-button">&times;</button>
             </div>
 
             <div class="share-content">
-                <div v-if="shareData.title" class="info-section">
+                <div v-if="shareData.name" class="info-section">
                     <h3>Название:</h3>
-                    <p>{{ shareData.title }}</p>
+                    <p>{{ shareData.name }}</p>
                 </div>
 
                 <div v-if="shareData.description" class="info-section">
@@ -105,15 +118,8 @@ const handleClose = () => {
                     <h3>Ссылка для публикации:</h3>
                     <p>Отправь <a href="https://t.me/vanton" target="_blank">@vanton</a> и мы её добавим!</p>
                     <div class="link-container">
-                        <input
-                            type="text"
-                            :value="shareUrl"
-                            readonly
-                            class="share-link-input"
-                        />
-                        <button @click="copyShareLink" class="copy-button">
-                            📋 Копировать
-                        </button>
+                        <input type="text" :value="shareUrl" readonly class="share-link-input" />
+                        <button @click="copyShareLink" class="copy-button">📋 Копировать</button>
                     </div>
                 </div>
 
@@ -123,7 +129,9 @@ const handleClose = () => {
                 </div>
 
                 <div v-if="showTelegramLink" class="telegram-countdown">
-                    <p>Окно закроется через: <strong>{{ countdown }}</strong> сек.</p>
+                    <p>
+                        Окно закроется через: <strong>{{ countdown }}</strong> сек.
+                    </p>
                 </div>
             </div>
 

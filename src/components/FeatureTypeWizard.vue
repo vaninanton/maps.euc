@@ -8,12 +8,12 @@ const emit = defineEmits(['select', 'cancel', 'save'])
 const props = defineProps({
     visible: {
         type: Boolean,
-        default: false
+        default: false,
     },
     layer: {
         type: Object,
-        default: null
-    }
+        default: null,
+    },
 })
 
 const selectedType = ref(FeatureTypes.ROUTE)
@@ -36,12 +36,15 @@ const detectLayerType = () => {
 }
 
 // Следим за изменением слоя
-watch(() => props.layer, (newLayer) => {
-    if (newLayer) {
-        selectedType.value = detectLayerType()
-    }
-})
-const title = ref('')
+watch(
+    () => props.layer,
+    (newLayer) => {
+        if (newLayer) {
+            selectedType.value = detectLayerType()
+        }
+    },
+)
+const name = ref('')
 const description = ref('')
 
 const handleSelect = async () => {
@@ -63,38 +66,40 @@ const handleSelect = async () => {
     props.layer.feature.type = 'Feature'
     props.layer.feature.properties = {
         type: selectedType.value,
-        title: title.value || '',
-        description: description.value || ''
+        name: name.value || '',
+        description: description.value || '',
     }
 
     const geoJsonData = props.layer.toGeoJSON()
     geoJsonData.properties = {
         type: selectedType.value,
-        title: title.value || '',
-        description: description.value || ''
+        name: name.value || '',
+        description: description.value || '',
     }
 
     console.log('Сформированный GeoJSON:', geoJsonData)
 
     // Определяем тип объекта для сообщения
-    const typeText = selectedType.value === FeatureTypes.POINT ? 'точку' :
-                    selectedType.value === FeatureTypes.SOCKET ? 'розетку' :
-                    'маршрут'
+    const typeText =
+        selectedType.value === FeatureTypes.POINT
+            ? 'точку'
+            : selectedType.value === FeatureTypes.SOCKET
+              ? 'розетку'
+              : 'маршрут'
 
     // Создаем данные для share
     const shareData = {
         type: selectedType.value,
         typeText: typeText,
-        title: title.value || '',
+        name: name.value || '',
         description: description.value || '',
-        geoJson: geoJsonData
+        geoJson: geoJsonData,
     }
 
     // Передаем данные родительскому компоненту
     emit('save', shareData)
     resetForm()
 }
-
 
 const handleCancel = () => {
     emit('cancel')
@@ -103,7 +108,7 @@ const handleCancel = () => {
 
 const resetForm = () => {
     selectedType.value = FeatureTypes.ROUTE
-    title.value = ''
+    name.value = ''
     description.value = ''
 }
 </script>
@@ -115,28 +120,38 @@ const resetForm = () => {
 
             <div class="type-selection">
                 <label :class="{ disabled: detectLayerType() !== FeatureTypes.POINT }">
-                    <input type="radio" v-model="selectedType" :value="FeatureTypes.POINT" :disabled="detectLayerType() !== FeatureTypes.POINT" />
+                    <input
+                        type="radio"
+                        v-model="selectedType"
+                        :value="FeatureTypes.POINT"
+                        :disabled="detectLayerType() !== FeatureTypes.POINT"
+                    />
                     Точка (место для катания)
                 </label>
                 <label :class="{ disabled: detectLayerType() !== FeatureTypes.POINT }">
-                    <input type="radio" v-model="selectedType" :value="FeatureTypes.SOCKET" :disabled="detectLayerType() !== FeatureTypes.POINT" />
+                    <input
+                        type="radio"
+                        v-model="selectedType"
+                        :value="FeatureTypes.SOCKET"
+                        :disabled="detectLayerType() !== FeatureTypes.POINT"
+                    />
                     Розетка (место для зарядки)
                 </label>
                 <label :class="{ disabled: detectLayerType() !== FeatureTypes.ROUTE }">
-                    <input type="radio" v-model="selectedType" :value="FeatureTypes.ROUTE" :disabled="detectLayerType() !== FeatureTypes.ROUTE" />
+                    <input
+                        type="radio"
+                        v-model="selectedType"
+                        :value="FeatureTypes.ROUTE"
+                        :disabled="detectLayerType() !== FeatureTypes.ROUTE"
+                    />
                     Маршрут
                 </label>
             </div>
 
             <div class="form-fields">
                 <div class="field">
-                    <label for="title">Название:</label>
-                    <input
-                        id="title"
-                        v-model="title"
-                        type="text"
-                        placeholder="Введите название объекта"
-                    />
+                    <label for="name">Название:</label>
+                    <input id="name" v-model="name" type="text" placeholder="Введите название объекта" />
                 </div>
 
                 <div class="field">
@@ -245,7 +260,7 @@ const resetForm = () => {
 }
 
 .btn-primary {
-    background: #4CAF50;
+    background: #4caf50;
     color: white;
 }
 
@@ -261,5 +276,4 @@ const resetForm = () => {
 .btn-secondary:hover {
     background: #da190b;
 }
-
 </style>

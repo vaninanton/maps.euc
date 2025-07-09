@@ -3,7 +3,7 @@ export default {
     POINT: 'point',
     ROUTE: 'route',
     BIKELANE: 'bikelane',
-    
+
     socket: {
         name: 'Розетка',
     },

@@ -70,6 +70,30 @@
                 "type": "Point",
                 "coordinates": [76.869417, 43.226284]
             }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "Кок жайляу",
+                "description": ""
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.971371, 43.12722]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "socket",
+                "name": "Розетка по дороге на Чимбулак",
+                "description": "Розетка на электрощите сзади"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [77.074944, 43.133556]
+            }
         }
     ]
 }
