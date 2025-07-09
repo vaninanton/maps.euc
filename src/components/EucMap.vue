@@ -3,6 +3,7 @@ import { onMounted, onBeforeUnmount, ref } from 'vue'
 import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
+import 'leaflet-providers/leaflet-providers'
 import '@geoman-io/leaflet-geoman-free'
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
 
@@ -27,7 +28,8 @@ const showShare = ref(false)
 const shareData = ref(null)
 
 let map
-let tileLayer
+let tileLayer1
+let tileLayer2
 let pointsLayer
 let socketsLayer
 let routesLayer
@@ -84,10 +86,15 @@ onMounted(function () {
             console.error('Ошибка при разборе share ссылки:', error)
         }
     }
-    tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    tileLayer1 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution:
             '&copy; OpenStreetMap, TG: <a href="https://t.me/+m9ifLDAQddM5ZDEy" target="_blank">Электроклуб Алматы</a>, Велодорожки: <a href="https://velojol.kz" target="_blank">velojol.kz</a>',
     })
+
+    tileLayer2 = L.tileLayer.provider('MapBox', {
+        id: 'vanton/cmcw742a0002m01s945vc1s0n',
+        accessToken: 'pk.eyJ1IjoidmFudG9uIiwiYSI6ImNtY3c2bWo4djA2amcybXBlams0ODI0cHQifQ.-PFTlBSPris_3p7XD29szA'
+    });
 
     // Споты
     pointsLayer = L.geoJSON(pointsGeojson, {
@@ -157,11 +164,8 @@ onMounted(function () {
         console.log('showWizard set to:', showWizard.value)
     })
 
-    map.on('pm:globaleditmodetoggled', (e) => {
-        generateGeoJson(map)
-    })
-
-    tileLayer.addTo(map)
+    tileLayer1.addTo(map)
+    // tileLayer2.addTo(map)
     pointsLayer.addTo(map)
     socketsLayer.addTo(map)
     routesLayer.addTo(map)
@@ -176,7 +180,10 @@ onMounted(function () {
         Велодорожки: veloLayer,
     }
 
-    L.control.layers(null, overlayMaps, { collapsed: false }).addTo(map)
+    L.control.layers({
+        'OpenStreetMap': tileLayer1,
+        'MapBox': tileLayer2,
+    }, overlayMaps, { collapsed: false }).addTo(map)
 })
 
 onBeforeUnmount(() => {

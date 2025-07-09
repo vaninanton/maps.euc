@@ -144,6 +144,30 @@
                 "type": "Point",
                 "coordinates": [77.079339, 43.08449]
             }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "Бочки",
+                "description": ""
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.977806, 43.182579]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "Замок дяди Вани",
+                "description": "Каменный замок или каменная крепость в Аксайском ущелье, которую более 30 лет собственноручно строил архитектор-любитель Иван Плотников"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.793656, 43.116331]
+            }
         }
     ]
 }
