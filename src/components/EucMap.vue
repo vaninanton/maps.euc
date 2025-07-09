@@ -91,11 +91,11 @@ onMounted(function () {
     })
 
     map.on('pm:drawend', (e, shape) => {
-        generateGeoJson()
+        generateGeoJson(map)
     })
 
     map.on('pm:globaleditmodetoggled', (e) => {
-        generateGeoJson()
+        generateGeoJson(map)
     })
 
     tileLayer.addTo(map)

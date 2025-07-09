@@ -1,4 +1,4 @@
-export default function () {
+export default function (map) {
     var fg = L.featureGroup()
     var layers = []
     map.eachLayer((layer) => {
@@ -15,5 +15,6 @@ export default function () {
     layers.forEach(function (layer) {
         fg.addLayer(layer)
     })
+    console.log('Скопируй это как объект')
     console.log(fg.toGeoJSON())
 }
