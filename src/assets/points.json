@@ -168,6 +168,18 @@
                 "type": "Point",
                 "coordinates": [76.793656, 43.116331]
             }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "Под мостом у ППП",
+                "description": "Место встречи - под мостом у Парка Первого Президента"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.890703, 43.194404]
+            }
         }
     ]
 }
