@@ -1,4 +1,4 @@
-import FeatureTypes from './featureTypes'
+import FeatureTypes from './FeatureTypes'
 
 function createPopupContent(feature) {
     const { type, name, description } = feature.properties ?? {}
