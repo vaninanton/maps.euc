@@ -106,6 +106,18 @@
                 "type": "Point",
                 "coordinates": [77.004997, 43.009634]
             }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "Хижина БАУ",
+                "description": ""
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [77.018658, 43.003002]
+            }
         }
     ]
 }
