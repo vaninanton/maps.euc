@@ -118,6 +118,18 @@
                 "type": "Point",
                 "coordinates": [77.018658, 43.003002]
             }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "Хижина Кызылсай",
+                "description": ""
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [77.06044, 43.016882]
+            }
         }
     ]
 }
