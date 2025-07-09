@@ -1,8 +1,8 @@
-import greenMarker from 'leaflet-color-markers/img/marker-icon-2x-green.png'
+import blueMarker from 'leaflet-color-markers/img/marker-icon-2x-blue.png'
 import shadowMarker from 'leaflet-color-markers/img/marker-shadow.png'
 
 export default new L.Icon({
-    iconUrl: greenMarker,
+    iconUrl: blueMarker,
     shadowUrl: shadowMarker,
     iconSize: [12.5, 20.5],
     iconAnchor: [6, 20.5],
