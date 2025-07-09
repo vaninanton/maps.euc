@@ -145,6 +145,7 @@ onMounted(function () {
         drawMarker: true,
         rotateMode: false,
         dragMode: false,
+        editMode: false,
         removalMode: false,
         cutPolygon: false,
     })
