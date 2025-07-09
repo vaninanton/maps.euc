@@ -1,6 +1,7 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import FeatureTypes from '../helpers/FeatureTypes'
+import * as L from 'leaflet'
 
 const emit = defineEmits(['select', 'cancel'])
 
@@ -16,6 +17,30 @@ const props = defineProps({
 })
 
 const selectedType = ref(FeatureTypes.ROUTE)
+
+// Определяем тип объекта по слою
+const detectLayerType = () => {
+    if (!props.layer) return FeatureTypes.ROUTE
+
+    // Если это маркер - значит точка
+    if (props.layer instanceof L.Marker || props.layer._latlng) {
+        return FeatureTypes.POINT
+    }
+
+    // Если это линия - значит маршрут
+    if (props.layer instanceof L.Polyline || props.layer._latlngs) {
+        return FeatureTypes.ROUTE
+    }
+
+    return FeatureTypes.ROUTE
+}
+
+// Следим за изменением слоя
+watch(() => props.layer, (newLayer) => {
+    if (newLayer) {
+        selectedType.value = detectLayerType()
+    }
+})
 const title = ref('')
 const description = ref('')
 const showTelegramLink = ref(false)
@@ -37,7 +62,6 @@ const handleSelect = async () => {
         return
     }
 
-    // Добавляем свойства к слою
     props.layer.feature = props.layer.feature || {}
     props.layer.feature.type = 'Feature'
     props.layer.feature.properties = {
@@ -46,7 +70,6 @@ const handleSelect = async () => {
         description: description.value || ''
     }
 
-    // Генерируем GeoJSON
     const geoJsonData = props.layer.toGeoJSON()
     geoJsonData.properties = props.layer.feature.properties
 
@@ -104,16 +127,16 @@ const resetForm = () => {
             <h2>Выберите тип объекта</h2>
 
             <div class="type-selection">
-                <label class="disabled">
-                    <input type="radio" v-model="selectedType" :value="FeatureTypes.POINT" disabled />
+                <label :class="{ disabled: detectLayerType() !== FeatureTypes.POINT }">
+                    <input type="radio" v-model="selectedType" :value="FeatureTypes.POINT" :disabled="detectLayerType() !== FeatureTypes.POINT" />
                     Точка (место для катания)
                 </label>
-                <label class="disabled">
-                    <input type="radio" v-model="selectedType" :value="FeatureTypes.SOCKET" disabled />
+                <label :class="{ disabled: detectLayerType() !== FeatureTypes.POINT }">
+                    <input type="radio" v-model="selectedType" :value="FeatureTypes.SOCKET" :disabled="detectLayerType() !== FeatureTypes.POINT" />
                     Розетка (место для зарядки)
                 </label>
-                <label>
-                    <input type="radio" v-model="selectedType" :value="FeatureTypes.ROUTE" />
+                <label :class="{ disabled: detectLayerType() !== FeatureTypes.ROUTE }">
+                    <input type="radio" v-model="selectedType" :value="FeatureTypes.ROUTE" :disabled="detectLayerType() !== FeatureTypes.ROUTE" />
                     Маршрут
                 </label>
             </div>
