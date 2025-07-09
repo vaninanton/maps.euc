@@ -3,6 +3,7 @@ import { onMounted, onBeforeUnmount } from 'vue'
 import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
+import '@geoman-io/leaflet-geoman-free'
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
 
 import pointsGeojson from '../assets/points.json'
@@ -22,7 +23,7 @@ let socketsLayer
 let routesLayer
 let veloLayer
 
-onMounted(async function () {
+onMounted(function () {
     map = L.map('map').setView([43.226807, 76.904848], 12)
     tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution:
@@ -73,11 +74,6 @@ onMounted(async function () {
         onEachFeature: createPopupForFeature,
     })
 
-    // at this point map.pm is undefined
-    if (!map.pm) {
-    await import(/* webpackChunkName: "leaflet-geoman" */ '@geoman-io/leaflet-geoman-free');
-    L.PM.reInitLayer(map)
-    }
     map.pm.setLang('ru')
 
     map.pm.addControls({
