@@ -16,9 +16,12 @@ import blueIcon from '../helpers/BlueIcon'
 import generateGeoJson from '../helpers/GenerateGeoJson'
 import createPopupForFeature from '../helpers/CreatePopupForFeature'
 import FeatureTypeWizard from './FeatureTypeWizard.vue'
+import FeatureShare from './FeatureShare.vue'
 
 const showWizard = ref(false)
 const currentLayer = ref(null)
+const showShare = ref(false)
+const shareData = ref(null)
 
 let map
 let tileLayer
@@ -33,6 +36,13 @@ const handleWizardSelect = () => {
     currentLayer.value = null
 }
 
+const handleWizardSave = (data) => {
+    // Скрываем визард и показываем share
+    showWizard.value = false
+    shareData.value = data
+    showShare.value = true
+}
+
 const handleWizardCancel = () => {
     // Удаляем слой если пользователь отменил
     if (currentLayer.value) {
@@ -42,8 +52,30 @@ const handleWizardCancel = () => {
     currentLayer.value = null
 }
 
+const handleShareClose = () => {
+    showShare.value = false
+    shareData.value = null
+    currentLayer.value = null
+}
+
 onMounted(function () {
     map = L.map('map').setView([43.226807, 76.904848], 12)
+
+    // Проверяем, есть ли параметр share в URL
+    const hash = window.location.hash
+    if (hash && hash.startsWith('#share=')) {
+        try {
+            const base64Data = hash.substring(7) // убираем '#share='
+            const jsonString = decodeURIComponent(escape(atob(base64Data)))
+            const parsedData = JSON.parse(jsonString)
+
+            // Показываем компонент FeatureShare с данными
+            shareData.value = parsedData
+            showShare.value = true
+        } catch (error) {
+            console.error('Ошибка при разборе share ссылки:', error)
+        }
+    }
     tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution:
             '&copy; OpenStreetMap, TG: <a href="https://t.me/+m9ifLDAQddM5ZDEy" target="_blank">Электроклуб Алматы</a>, Велодорожки: <a href="https://velojol.kz" target="_blank">velojol.kz</a>',
@@ -149,7 +181,13 @@ onBeforeUnmount(() => {
         :visible="showWizard"
         :layer="currentLayer"
         @select="handleWizardSelect"
+        @save="handleWizardSave"
         @cancel="handleWizardCancel"
+    />
+    <FeatureShare
+        :visible="showShare"
+        :shareData="shareData"
+        @close="handleShareClose"
     />
 </template>
 
