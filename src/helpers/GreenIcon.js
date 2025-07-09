@@ -4,8 +4,8 @@ import shadowMarker from 'leaflet-color-markers/img/marker-shadow.png'
 export default new L.Icon({
     iconUrl: greenMarker,
     shadowUrl: shadowMarker,
-    iconSize: [12.5, 20.5],
-    iconAnchor: [6, 20.5],
-    popupAnchor: [1, -17],
-    shadowSize: [20.5, 20.5],
+    iconSize: [25, 41],
+    iconAnchor: [6, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
 })
