@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onBeforeUnmount } from 'vue'
+import { onMounted, onBeforeUnmount, ref } from 'vue'
 import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
@@ -15,6 +15,10 @@ import greenIcon from '../helpers/GreenIcon'
 import blueIcon from '../helpers/BlueIcon'
 import generateGeoJson from '../helpers/GenerateGeoJson'
 import createPopupForFeature from '../helpers/CreatePopupForFeature'
+import FeatureTypeWizard from './FeatureTypeWizard.vue'
+
+const showWizard = ref(false)
+const currentLayer = ref(null)
 
 let map
 let tileLayer
@@ -22,6 +26,21 @@ let pointsLayer
 let socketsLayer
 let routesLayer
 let veloLayer
+
+const handleWizardSelect = () => {
+    // Скрываем визард
+    showWizard.value = false
+    currentLayer.value = null
+}
+
+const handleWizardCancel = () => {
+    // Удаляем слой если пользователь отменил
+    if (currentLayer.value) {
+        map.removeLayer(currentLayer.value)
+    }
+    showWizard.value = false
+    currentLayer.value = null
+}
 
 onMounted(function () {
     map = L.map('map').setView([43.226807, 76.904848], 12)
@@ -83,15 +102,18 @@ onMounted(function () {
         drawRectangle: false,
         drawCircle: false,
         drawText: false,
-        drawMarker: false,
+        drawMarker: true,
         rotateMode: false,
         dragMode: false,
         removalMode: false,
         cutPolygon: false,
     })
 
-    map.on('pm:drawend', (e, shape) => {
-        generateGeoJson(map)
+    map.on('pm:create', (e) => {
+        console.log('pm:create event fired', e)
+        currentLayer.value = e.layer
+        showWizard.value = true
+        console.log('showWizard set to:', showWizard.value)
     })
 
     map.on('pm:globaleditmodetoggled', (e) => {
@@ -123,6 +145,12 @@ onBeforeUnmount(() => {
 
 <template>
     <div id="map"></div>
+    <FeatureTypeWizard
+        :visible="showWizard"
+        :layer="currentLayer"
+        @select="handleWizardSelect"
+        @cancel="handleWizardCancel"
+    />
 </template>
 
 <style scoped>
