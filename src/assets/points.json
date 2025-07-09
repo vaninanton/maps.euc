@@ -5,7 +5,8 @@
             "type": "Feature",
             "properties": {
                 "type": "point",
-                "name": "&laquo;Ягуар&raquo;"
+                "name": "&laquo;Ягуар&raquo;",
+                "description": "Велосипедная трасса, найдена на канале RollAllDay"
             },
             "geometry": {
                 "type": "Point",
@@ -16,7 +17,8 @@
             "type": "Feature",
             "properties": {
                 "type": "point",
-                "name": "[заполнить название]"
+                "name": "Р-н Каргалы (каргалинка)",
+                "description": "Радом конная ферма"
             },
             "geometry": {
                 "type": "Point",
