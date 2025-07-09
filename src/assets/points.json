@@ -1,0 +1,75 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "&laquo;Ягуар&raquo;"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.935397, 43.190456]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "[заполнить название]"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.866243, 43.157895]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "КБТУ",
+                "description": "Точка сбора, площадка для обучения"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.943194, 43.256377]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "Памп-трек",
+                "description": "Асфальтовые кочки, тренировка коленей и подвески"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.984305, 43.32182]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "Сайран",
+                "description": "Фанерный скейт-парк, резиновое покрытие для обучения на моноколесе"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.867765, 43.237843]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "Стадион в 8 микрорайоне",
+                "description": "Резиновое покрытие для обучения на моноколесе"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.869417, 43.226284]
+            }
+        }
+    ]
+}

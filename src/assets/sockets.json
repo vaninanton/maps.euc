@@ -1,0 +1,38 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "socket",
+                "description": "Розетка у входа в 10 павильон"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.904882, 43.222252]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "socket",
+                "description": "Розетка у входа в gorilla energy park"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.93340420722961, 43.21062139869281]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "socket",
+                "description": "Розетка у туалета в Парке Горького"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.97160422801973, 43.265725731359794]
+            }
+        }
+    ]
+}
