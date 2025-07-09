@@ -1,19 +1,23 @@
 import FeatureTypes from './FeatureTypes'
 
 function createPopupContent(feature) {
-    const { type, name, description } = feature.properties ?? {}
+    const { type, name, description } = feature.properties ?? {};
+    const coordinates = feature.geometry.coordinates;
+    const isPoint = feature.geometry.type === 'Point';
+    const isMobile2GisType = (window.innerWidth <= 800) ? 'scooter' : 'pedestrian';
 
-    // console.log(feature.geometry.type);
-    // console.log(feature.geometry.coordinates);
-    return [
+    const content = [
         type && FeatureTypes[type] ? `<span class="font-semibold">${FeatureTypes[type]?.name}</span> ` : '',
         name ? `<span class="font-bold">${name}</span>` : '',
         description ? `<div>${description}</div>` : '',
-        (feature.geometry.type === 'Point') ? '<div class="maps-links">' : '',
-        (feature.geometry.type === 'Point') ? '<a href="https://yandex.ru/maps/?rtext=~'+feature.geometry.coordinates[1]+','+feature.geometry.coordinates[0]+'&rtt=sc" target="_blank">Яндекс.Карты</a> ' : '',
-        (feature.geometry.type === 'Point') ? '<a href="https://2gis.kz/directions/tab/bicycle/points/|'+feature.geometry.coordinates[0]+','+feature.geometry.coordinates[1]+'" target="_blank">2GIS</a>' : '',
-        (feature.geometry.type === 'Point') ? '</div>' : '',
-    ].join('')
+        isPoint ? '<div class="maps-links">' : '',
+        isPoint ? '<h3>Построить маршрут:</h3>' : '',
+        isPoint ? `<a href="https://yandex.ru/maps/?rtext=~${coordinates[1]},${coordinates[0]}&rtt=sc" target="_blank">Яндекс.Карты</a> ` : '',
+        isPoint ? `<a href="https://2gis.kz/directions/tab/${isMobile2GisType}/points/|${coordinates[0]},${coordinates[1]}" target="_blank">2GIS</a>` : '',
+        isPoint ? '</div>' : '',
+    ];
+
+    return content.join('');
 }
 
 export default function (feature, layer) {
