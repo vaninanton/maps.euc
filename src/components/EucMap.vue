@@ -14,7 +14,9 @@ import velojolAlmaty from '../assets/velojol/almaty.json'
 import velojol2geojson from '../helpers/Velojol2GeoJson'
 import greenIcon from '../helpers/GreenIcon'
 import blueIcon from '../helpers/BlueIcon'
+import redIcon from '../helpers/RedIcon'
 import generateGeoJson from '../helpers/GenerateGeoJson'
+import { decode } from 'js-base64'
 import createPopupForFeature from '../helpers/CreatePopupForFeature'
 import FeatureTypeWizard from './FeatureTypeWizard.vue'
 import FeatureShare from './FeatureShare.vue'
@@ -72,20 +74,53 @@ onMounted(function () {
     L.Icon.Default.imagePath = ''
 
     // Проверяем, есть ли параметр share в URL
-    const hash = window.location.hash
-    if (hash && hash.startsWith('#share=')) {
-        try {
-            const base64Data = hash.substring(7) // убираем '#share='
-            const jsonString = decodeURIComponent(escape(atob(base64Data)))
-            const parsedData = JSON.parse(jsonString)
+    const onHash = () => {
+        const hash = window.location.hash
+        if (hash) {
+            try {
+                const parsedHash = new URLSearchParams(hash.substring(1))
+                const base64Data = decodeURIComponent(parsedHash.get('share'))
+                const jsonString = decode(base64Data)
+                const parsedData = JSON.parse(jsonString)
 
-            // Показываем компонент FeatureShare с данными
-            shareData.value = parsedData
-            showShare.value = true
-        } catch (error) {
-            console.error('Ошибка при разборе share ссылки:', error)
+                // Показываем компонент FeatureShare с данными
+                shareData.value = parsedData
+                showShare.value = true
+
+                // Редактируемое
+                L.geoJSON(
+                    {
+                        type: 'FeatureCollection',
+                        features: [{ ...parsedData.geoJson }],
+                    },
+                    {
+                        pmIgnore: true,
+                        style: {
+                            color: 'red',
+                            weight: 3,
+                            dashArray: '6, 6',
+                        },
+                        onEachFeature: createPopupForFeature,
+                        pointToLayer: function (feature, latlng) {
+                            return L.marker(latlng, {
+                                icon: redIcon,
+                            })
+                        },
+                    },
+                ).addTo(map)
+            } catch (error) {
+                console.error('Ошибка при разборе share ссылки:', error)
+            }
         }
     }
+
+    window.onhashchange = () => {
+        console.log('Hash changed! Parsing...')
+        onHash()
+    }
+
+    onHash()
+
     tileLayer1 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution:
             '&copy; OpenStreetMap, TG: <a href="https://t.me/+m9ifLDAQddM5ZDEy" target="_blank">Электроклуб Алматы</a>, Велодорожки: <a href="https://velojol.kz" target="_blank">velojol.kz</a>',
@@ -93,8 +128,8 @@ onMounted(function () {
 
     tileLayer2 = L.tileLayer.provider('MapBox', {
         id: 'vanton/cmcw742a0002m01s945vc1s0n',
-        accessToken: 'pk.eyJ1IjoidmFudG9uIiwiYSI6ImNtY3c2bWo4djA2amcybXBlams0ODI0cHQifQ.-PFTlBSPris_3p7XD29szA'
-    });
+        accessToken: 'pk.eyJ1IjoidmFudG9uIiwiYSI6ImNtY3c2bWo4djA2amcybXBlams0ODI0cHQifQ.-PFTlBSPris_3p7XD29szA',
+    })
 
     // Споты
     pointsLayer = L.geoJSON(pointsGeojson, {
@@ -180,10 +215,16 @@ onMounted(function () {
         Велодорожки: veloLayer,
     }
 
-    L.control.layers({
-        'OpenStreetMap': tileLayer1,
-        'MapBox': tileLayer2,
-    }, overlayMaps, { collapsed: false }).addTo(map)
+    L.control
+        .layers(
+            {
+                OpenStreetMap: tileLayer1,
+                MapBox: tileLayer2,
+            },
+            overlayMaps,
+            { collapsed: false },
+        )
+        .addTo(map)
 })
 
 onBeforeUnmount(() => {

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
+import { encodeURI } from 'js-base64'
 
 const props = defineProps({
     visible: {
@@ -20,8 +21,21 @@ const shareUrl = ref('')
 
 const formattedJson = computed(() => {
     if (!props.shareData?.geoJson) return ''
-    return JSON.stringify(props.shareData.geoJson, null, 2)
+    return ',' + JSON.stringify(props.shareData.geoJson, null, 4)
 })
+
+const generateShareUrl = () => {
+    try {
+        const jsonString = JSON.stringify(props.shareData)
+        const base64Data = encodeURI(jsonString)
+        shareUrl.value = `${window.location.origin}${window.location.pathname}#share=${base64Data}`
+
+        // Обновляем URL в браузере
+        // window.history.replaceState(null, '', shareUrl.value)
+    } catch (error) {
+        console.error('Ошибка при создании share URL:', error)
+    }
+}
 
 // Следим за изменением shareData
 watch(
@@ -33,19 +47,6 @@ watch(
     },
     { immediate: true },
 )
-
-const generateShareUrl = () => {
-    try {
-        const jsonString = JSON.stringify(props.shareData)
-        const base64Data = btoa(unescape(encodeURIComponent(jsonString)))
-        shareUrl.value = `${window.location.origin}${window.location.pathname}#share=${base64Data}`
-
-        // Обновляем URL в браузере
-        window.history.replaceState(null, '', shareUrl.value)
-    } catch (error) {
-        console.error('Ошибка при создании share URL:', error)
-    }
-}
 
 const shareToTelegram = () => {
     try {
@@ -83,7 +84,7 @@ const copyShareLink = () => {
 
 const handleClose = () => {
     // Очищаем hash из URL
-    window.history.replaceState(null, '', window.location.pathname)
+    // window.history.replaceState(null, '', window.location.pathname)
     showTelegramLink.value = false
     emit('close')
 }
@@ -237,6 +238,7 @@ const handleClose = () => {
     font-size: 12px;
     line-height: 1.4;
     color: #333;
+    user-select: all;
 }
 
 .share-link-section {
@@ -259,6 +261,7 @@ const handleClose = () => {
     border-radius: 6px;
     font-size: 14px;
     background: #f9f9f9;
+    user-select: all;
 }
 
 .copy-button {

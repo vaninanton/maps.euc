@@ -149,8 +149,8 @@
             "type": "Feature",
             "properties": {
                 "type": "point",
-                "name": "Бочки",
-                "description": ""
+                "name": "Четыре бочки",
+                "description": "Обзорная точка города. С неё открывается потрясающий вид на город, конечно же если «поймать» хорошую погоду"
             },
             "geometry": {
                 "type": "Point",

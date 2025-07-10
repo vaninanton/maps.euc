@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@geoman-io/leaflet-geoman-free": "^2.18.3",
+    "js-base64": "^3.7.7",
     "leaflet": "^1.9.4",
     "leaflet-color-markers": "^0.1.0",
     "leaflet-providers": "^2.0.0",

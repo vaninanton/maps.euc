@@ -1,5 +1,13 @@
 import FeatureTypes from './FeatureTypes'
 
+function createTooltipContent(feature) {
+    const { type, name, description } = feature.properties ?? {}
+    const typeText = type && FeatureTypes[type] ? `<span class="font-semibold">${FeatureTypes[type]?.name}</span> ` : ''
+    const nameText = name ? name : ''
+
+    return typeText + nameText
+}
+
 function createPopupContent(feature) {
     const { type, name, description } = feature.properties ?? {}
     const coordinates = feature.geometry.coordinates
@@ -26,7 +34,11 @@ function createPopupContent(feature) {
 
 export default function (feature, layer) {
     const popupContent = createPopupContent(feature)
+    const tooltipContent = createTooltipContent(feature)
     if (popupContent) {
         layer.bindPopup(popupContent)
+    }
+    if (tooltipContent) {
+        layer.bindTooltip(tooltipContent)
     }
 }
