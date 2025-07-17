@@ -1,5 +1,22 @@
-# Vue 3 + Vite
+# maps.euc.kz
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Программа для создания и редактирования маршрутов для моноколёс на карте
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Как использовать
+
+1. Откройте [map.euc.kz](https://map.euc.kz/) в браузере.
+2. Выберите интересующий вас район на карте.
+3. Нажмите на кнопку "Добавить маршрут" и начните рисовать маршрут на карте.
+4. Для каждого элемента маршрута (например, остановки или поворота) можно добавить описание, фотографии и другие данные.
+5. Когда маршрут будет готов, нажмите на кнопку "Сохранить" и поделитесь ссылкой на него с друзьями.
+
+## Как помочь проекту
+
+Если у вас есть идеи по улучшению или вы хотите помочь с разработкой, пожалуйста, напишите мне в [telegram](https://t.me/vanton).
+
+## Благодарности
+
+Спасибо за помощь в разработке:
+
+* [Velojol.kz](https://velojol.kz/) за данные о велодорожках.
+
