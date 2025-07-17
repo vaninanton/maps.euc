@@ -41,4 +41,15 @@ export default function (feature, layer) {
     if (tooltipContent) {
         layer.bindTooltip(tooltipContent)
     }
+
+    let defaultStyleColor = '#f25824'
+    layer.on('mouseover', function (e) {
+        defaultStyleColor = e.target.options.style.color || '#f25824'
+        e.target.setStyle({
+            color: '#ff8800',
+        })
+    })
+    layer.on('mouseout', function (e) {
+        e.target.setStyle({ color: defaultStyleColor })
+    })
 }

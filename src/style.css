@@ -31,6 +31,10 @@ body {
     pointer-events: none;
 }
 
+.leaflet-interactive {
+    transition: all 0.2s ease-in-out;
+}
+
 .font-bold {
     font-weight: bold;
 }

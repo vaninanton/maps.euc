@@ -157,8 +157,8 @@ onMounted(function () {
     routesLayer = L.geoJSON(routesGeojson, {
         pmIgnore: true,
         style: {
-            color: 'red',
-            weight: 3,
+            color: '#f25824',
+            weight: 2.5,
         },
         onEachFeature: createPopupForFeature,
     })
