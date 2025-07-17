@@ -192,6 +192,18 @@
                 "type": "Point",
                 "coordinates": [76.994012, 43.339143]
             }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "Туристический Центр Аюсай",
+                "description": "Есть розетки, но иногда не разрешают заряжаться"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.944726, 43.101416]
+            }
         }
     ]
 }
