@@ -180,6 +180,18 @@
                 "type": "Point",
                 "coordinates": [76.890703, 43.194404]
             }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "Аэропортовское озеро",
+                "description": ""
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.994012, 43.339143]
+            }
         }
     ]
 }
