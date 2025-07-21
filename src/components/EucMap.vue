@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onBeforeUnmount, ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref, shallowRef } from 'vue'
 import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 
@@ -23,9 +23,19 @@ const currentLayer = ref(null)
 const showShare = ref(false)
 const shareData = ref(null)
 
-let map
-let tileLayer1
-let tileLayer2
+const map = shallowRef(null)
+
+const baseLayers = {
+    osm: shallowRef(null),
+    mapbox: shallowRef(null),
+}
+
+const layers = {
+    points: shallowRef(null),
+    sockets: shallowRef(null),
+    routes: shallowRef(null),
+    velo: shallowRef(null),
+}
 
 const handleWizardSelect = () => {
     // Скрываем визард
@@ -43,7 +53,7 @@ const handleWizardSave = (data) => {
 const handleWizardCancel = () => {
     // Удаляем слой если пользователь отменил
     if (currentLayer.value) {
-        map.removeLayer(currentLayer.value)
+        map.value.removeLayer(currentLayer.value)
     }
     showWizard.value = false
     currentLayer.value = null
@@ -56,7 +66,7 @@ const handleShareClose = () => {
 }
 
 onMounted(function () {
-    map = L.map('map').setView([43.226807, 76.904848], 12)
+    map.value = L.map('map').setView([43.226807, 76.904848], 12)
 
     L.Icon.Default.prototype.options.iconUrl = markerIconUrl
     L.Icon.Default.prototype.options.iconRetinaUrl = markerIconRetinaUrl
@@ -97,7 +107,7 @@ onMounted(function () {
                             })
                         },
                     },
-                ).addTo(map)
+                ).addTo(map.value)
             } catch (error) {
                 console.error('Ошибка при разборе share ссылки:', error)
             }
@@ -107,24 +117,24 @@ onMounted(function () {
     window.addEventListener('hashchange', onHash)
     onHash()
 
-    tileLayer1 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    baseLayers.osm.value = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution:
             '&copy; OpenStreetMap, TG: <a href="https://t.me/+m9ifLDAQddM5ZDEy" target="_blank">Электроклуб Алматы</a>, Велодорожки: <a href="https://velojol.kz" target="_blank">velojol.kz</a>',
     })
 
-    tileLayer2 = L.tileLayer.provider('MapBox', {
+    baseLayers.mapbox.value = L.tileLayer.provider('MapBox', {
         id: 'vanton/cmcw742a0002m01s945vc1s0n',
         accessToken: 'pk.eyJ1IjoidmFudG9uIiwiYSI6ImNtY3c2bWo4djA2amcybXBlams0ODI0cHQifQ.-PFTlBSPris_3p7XD29szA',
     })
 
-    let pointsLayer = createPointsLayer()
-    let socketsLayer = createSocketsLayer()
-    let routesLayer = createRoutesLayer()
-    let veloLayer = createVeloLayer()
+    layers.points.value = createPointsLayer()
+    layers.sockets.value = createSocketsLayer()
+    layers.routes.value = createRoutesLayer()
+    layers.velo.value = createVeloLayer()
 
-    map.pm.setLang('ru')
+    map.value.pm.setLang('ru')
 
-    map.pm.addControls({
+    map.value.pm.addControls({
         position: 'topleft',
         drawCircleMarker: false,
         drawPolygon: false,
@@ -139,43 +149,43 @@ onMounted(function () {
         cutPolygon: false,
     })
 
-    map.on('pm:create', (e) => {
+    map.value.on('pm:create', (e) => {
         console.log('pm:create event fired', e)
         currentLayer.value = e.layer
         showWizard.value = true
         console.log('showWizard set to:', showWizard.value)
     })
 
-    tileLayer1.addTo(map)
-    // tileLayer2.addTo(map)
-    pointsLayer.addTo(map)
-    socketsLayer.addTo(map)
-    routesLayer.addTo(map)
+    baseLayers.osm.value.addTo(map.value)
+    // baseLayers.mapbox.value.addTo(map.value)
+    layers.points.value.addTo(map.value)
+    layers.sockets.value.addTo(map.value)
+    layers.routes.value.addTo(map.value)
     // Велодорожки по умолчанию выключены
-    // veloLayer.addTo(map)
+    // layers.velo.value.addTo(map.value)
 
     // Панель управления слоями
     const overlayMaps = {
-        Точки: pointsLayer,
-        Розетки: socketsLayer,
-        Маршруты: routesLayer,
-        Велодорожки: veloLayer,
+        Точки: layers.points.value,
+        Розетки: layers.sockets.value,
+        Маршруты: layers.routes.value,
+        Велодорожки: layers.velo.value,
     }
 
     L.control
         .layers(
             {
-                OpenStreetMap: tileLayer1,
-                MapBox: tileLayer2,
+                OpenStreetMap: baseLayers.osm.value,
+                MapBox: baseLayers.mapbox.value,
             },
             overlayMaps,
             { collapsed: false },
         )
-        .addTo(map)
+        .addTo(map.value)
 })
 
 onBeforeUnmount(() => {
-    if (map) map.remove()
+    if (map.value) map.value.remove()
     window.removeEventListener('hashchange', onHash)
 })
 </script>
