@@ -104,11 +104,7 @@ onMounted(function () {
         }
     }
 
-    window.onhashchange = () => {
-        console.log('Hash changed! Parsing...')
-        onHash()
-    }
-
+    window.addEventListener('hashchange', onHash)
     onHash()
 
     tileLayer1 = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -180,6 +176,7 @@ onMounted(function () {
 
 onBeforeUnmount(() => {
     if (map) map.remove()
+    window.removeEventListener('hashchange', onHash)
 })
 </script>
 
