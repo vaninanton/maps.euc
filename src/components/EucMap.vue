@@ -7,13 +7,8 @@ import 'leaflet-providers/leaflet-providers'
 import '@geoman-io/leaflet-geoman-free'
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
 
-import pointsGeojson from '../assets/points.json'
-import routesGeojson from '../assets/routes.json'
-import socketsGeojson from '../assets/sockets.json'
-import velojolAlmaty from '../assets/velojol/almaty.json'
-import velojol2geojson from '../helpers/Velojol2GeoJson'
-import greenIcon from '../helpers/GreenIcon'
-import blueIcon from '../helpers/BlueIcon'
+import { createPointsLayer, createSocketsLayer, createRoutesLayer, createVeloLayer } from '../helpers/useMapLayers'
+
 import redIcon from '../helpers/RedIcon'
 import { decode } from 'js-base64'
 import createPopupForFeature from '../helpers/CreatePopupForFeature'
@@ -31,10 +26,6 @@ const shareData = ref(null)
 let map
 let tileLayer1
 let tileLayer2
-let pointsLayer
-let socketsLayer
-let routesLayer
-let veloLayer
 
 const handleWizardSelect = () => {
     // Скрываем визард
@@ -130,49 +121,10 @@ onMounted(function () {
         accessToken: 'pk.eyJ1IjoidmFudG9uIiwiYSI6ImNtY3c2bWo4djA2amcybXBlams0ODI0cHQifQ.-PFTlBSPris_3p7XD29szA',
     })
 
-    // Споты
-    pointsLayer = L.geoJSON(pointsGeojson, {
-        pmIgnore: true,
-        pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, {
-                icon: blueIcon,
-            })
-        },
-        onEachFeature: createPopupForFeature,
-    })
-
-    // Розетки
-    socketsLayer = L.geoJSON(socketsGeojson, {
-        pmIgnore: true,
-        pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, {
-                icon: greenIcon,
-            })
-        },
-        onEachFeature: createPopupForFeature,
-    })
-
-    // Маршруты
-    routesLayer = L.geoJSON(routesGeojson, {
-        pmIgnore: true,
-        style: {
-            color: '#f25824',
-            weight: 2.5,
-        },
-        onEachFeature: createPopupForFeature,
-    })
-
-    // Велодорожки
-    const veloGeoJson = velojol2geojson(velojolAlmaty, ['alm84', 'alm85', 'alm86', 'alm89'])
-    veloLayer = L.geoJSON(veloGeoJson, {
-        pmIgnore: true,
-        style: {
-            color: 'green',
-            weight: 3,
-            dashArray: '6, 6',
-        },
-        onEachFeature: createPopupForFeature,
-    })
+    let pointsLayer = createPointsLayer()
+    let socketsLayer = createSocketsLayer()
+    let routesLayer = createRoutesLayer()
+    let veloLayer = createVeloLayer()
 
     map.pm.setLang('ru')
 
