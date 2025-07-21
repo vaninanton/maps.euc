@@ -42,14 +42,18 @@ export default function (feature, layer) {
         layer.bindTooltip(tooltipContent)
     }
 
-    let defaultStyleColor = '#f25824'
-    layer.on('mouseover', function (e) {
-        defaultStyleColor = e.target.options.style.color || '#f25824'
-        e.target.setStyle({
-            color: '#ff8800',
+    if (feature.geometry.type === 'LineString' && feature.properties.type !== 'bikelane') {
+        let defaultColor = '#f25824'
+        let hoverColor = '#ff8800'
+        let defaultStyleColor
+        layer.on('mouseover', function (e) {
+            defaultStyleColor = e.target.options.style.color || defaultColor
+            e.target.setStyle({
+                color: hoverColor,
+            })
         })
-    })
-    layer.on('mouseout', function (e) {
-        e.target.setStyle({ color: defaultStyleColor })
-    })
+        layer.on('mouseout', function (e) {
+            e.target.setStyle({ color: defaultStyleColor })
+        })
+    }
 }
