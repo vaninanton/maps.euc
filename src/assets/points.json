@@ -204,6 +204,18 @@
                 "type": "Point",
                 "coordinates": [76.944726, 43.101416]
             }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "type": "point",
+                "name": "Беседка на плотине Есентай",
+                "description": "Место встречи"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [76.932896, 43.219106]
+            }
         }
     ]
 }
