@@ -4,7 +4,9 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 1,
                 "type": "socket",
+                "name": "на Атакенте",
                 "description": "Розетка у входа в 10 павильон"
             },
             "geometry": {
@@ -15,7 +17,9 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 2,
                 "type": "socket",
+                "name": "на трамплинах Сункар",
                 "description": "Розетка у входа в gorilla energy park"
             },
             "geometry": {
@@ -26,8 +30,10 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 3,
                 "type": "socket",
-                "description": "Розетка у туалета в Парке Горького"
+                "name": "в парке Горького",
+                "description": "за туалетом в Парке Горького"
             },
             "geometry": {
                 "type": "Point",
@@ -37,13 +43,27 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 4,
                 "type": "socket",
-                "name": "Коворкинг yandex go",
-                "description": "Последний ларек там где подьемник, выглядит закрытым но всегда открыт, внутри десятики розеток. Работает только во время работы канатной дороги"
+                "name": "в коворкинге Яндекса",
+                "description": "Последний ларек там где подьемник, внутри десятики розеток. Работает только во время работы канатной дороги"
             },
             "geometry": {
                 "type": "Point",
                 "coordinates": [77.050713, 43.162939]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "id": 5,
+                "type": "socket",
+                "name": "по дороге на Шымбулак",
+                "description": "Розетка на электрощите сзади"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [77.074944, 43.133556]
             }
         }
     ]

@@ -4,8 +4,9 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 1,
                 "type": "point",
-                "name": "&laquo;Ягуар&raquo;",
+                "name": "Ягуар",
                 "description": "Велосипедная трасса, найдена на канале RollAllDay"
             },
             "geometry": {
@@ -16,6 +17,7 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 2,
                 "type": "point",
                 "name": "Р-н Каргалы (каргалинка)",
                 "description": "Радом конная ферма"
@@ -28,6 +30,7 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 3,
                 "type": "point",
                 "name": "КБТУ",
                 "description": "Точка сбора, площадка для обучения"
@@ -40,6 +43,7 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 4,
                 "type": "point",
                 "name": "Памп-трек",
                 "description": "Асфальтовые кочки, тренировка коленей и подвески"
@@ -52,9 +56,10 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 5,
                 "type": "point",
-                "name": "Сайран",
-                "description": "Фанерный скейт-парк, резиновое покрытие для обучения на моноколесе"
+                "name": "Скейт-парк на Сайране",
+                "description": "Фанерный скейт-парк. Резиновое покрытие. Подходит для обучения на моноколесе"
             },
             "geometry": {
                 "type": "Point",
@@ -64,9 +69,10 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 6,
                 "type": "point",
                 "name": "Стадион в 8 микрорайоне",
-                "description": "Резиновое покрытие для обучения на моноколесе"
+                "description": "Резиновое покрытие. Подходит для обучения на моноколесе"
             },
             "geometry": {
                 "type": "Point",
@@ -76,8 +82,9 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 7,
                 "type": "point",
-                "name": "Кок жайляу",
+                "name": "Кок-Жайляу",
                 "description": ""
             },
             "geometry": {
@@ -88,18 +95,7 @@
         {
             "type": "Feature",
             "properties": {
-                "type": "socket",
-                "name": "Розетка по дороге на Чимбулак",
-                "description": "Розетка на электрощите сзади"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [77.074944, 43.133556]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
+                "id": 8,
                 "type": "point",
                 "name": "Гераниевая поляна",
                 "description": ""
@@ -112,6 +108,7 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 9,
                 "type": "point",
                 "name": "Хижина БАУ",
                 "description": ""
@@ -124,6 +121,7 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 10,
                 "type": "point",
                 "name": "Хижина Кызылсай",
                 "description": ""
@@ -136,6 +134,7 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 11,
                 "type": "point",
                 "name": "Мынжылкы",
                 "description": ""
@@ -148,6 +147,7 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 12,
                 "type": "point",
                 "name": "Четыре бочки",
                 "description": "Обзорная точка города. С неё открывается потрясающий вид на город, конечно же если «поймать» хорошую погоду"
@@ -160,6 +160,7 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 13,
                 "type": "point",
                 "name": "Замок дяди Вани",
                 "description": "Каменный замок или каменная крепость в Аксайском ущелье, которую более 30 лет собственноручно строил архитектор-любитель Иван Плотников"
@@ -172,6 +173,7 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 14,
                 "type": "point",
                 "name": "Под мостом у ППП",
                 "description": "Место встречи - под мостом у Парка Первого Президента"
@@ -184,6 +186,7 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 15,
                 "type": "point",
                 "name": "Аэропортовское озеро",
                 "description": ""
@@ -196,6 +199,7 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 16,
                 "type": "point",
                 "name": "Туристический Центр Аюсай",
                 "description": "Есть розетки, но иногда не разрешают заряжаться"
@@ -208,6 +212,7 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 17,
                 "type": "point",
                 "name": "Беседка на плотине Есентай",
                 "description": "Место встречи"
