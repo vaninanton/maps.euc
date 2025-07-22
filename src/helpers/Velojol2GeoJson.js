@@ -14,6 +14,7 @@ export default function (items, skipIds) {
                 coordinates: item.coordinates,
             },
             properties: {
+                id: item.id,
                 name: item.name,
                 description: item.description,
                 type: 'bikelane',
