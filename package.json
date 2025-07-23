@@ -17,7 +17,7 @@
     "leaflet-color-markers": "^0.1.0",
     "leaflet-providers": "^2.0.0",
     "tailwindcss": "^4.1.11",
-    "vue": "^3.5.17"
+    "vue": "^3.5.18"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.0",
