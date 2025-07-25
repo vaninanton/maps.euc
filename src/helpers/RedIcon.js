@@ -1,4 +1,4 @@
-import redMarker from 'leaflet-color-markers/img/marker-icon-2x-red.png?no-inline'
+import redMarker from 'leaflet-color-markers/img/marker-icon-2x-red.png'
 import shadowMarker from 'leaflet-color-markers/img/marker-shadow.png'
 
 export default new L.Icon({

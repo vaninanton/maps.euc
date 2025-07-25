@@ -5,7 +5,11 @@ import vue from '@vitejs/plugin-vue'
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [vue(), tailwindcss()],
+    server: {
+        allowedHosts: true,
+    },
     build: {
+        assetsInlineLimit: 0,
         rollupOptions: {
             output: {
                 manualChunks(id) {
