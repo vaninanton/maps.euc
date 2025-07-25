@@ -9,9 +9,8 @@ import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
 
 import { createPointsLayer, createSocketsLayer, createRoutesLayer, createBikelanesLayer } from '../helpers/useMapLayers'
 
-import redIcon from '../helpers/RedIcon'
 import { decode } from 'js-base64'
-import createPopupForFeature from '../helpers/CreatePopupForFeature'
+import { redIcon } from '../helpers/markerIcons'
 import FeatureTypeWizard from './FeatureTypeWizard.vue'
 import FeatureShare from './FeatureShare.vue'
 import markerIconUrl from 'leaflet/dist/images/marker-icon.png'
@@ -78,6 +77,23 @@ const handleShareClose = () => {
     currentLayer.value = null
 }
 
+const focusLayerById = function (id, type, setView = true) {
+    id = parseInt(id, 10)
+    const layerGroup = layers[type]?.value
+    console.log(layerGroup)
+    if (!layerGroup) return
+
+    layerGroup.eachLayer((layer) => {
+        if (layer.feature?.properties?.id === id) {
+            if (map.value && setView) {
+                map.value.setView(layer.getLatLng(), 15)
+            }
+            layer.fire('click')
+        }
+    })
+
+}
+
 const parseHash = () => {
     const hash = window.location.hash.substring(1)
     if (!hash) return
@@ -85,25 +101,16 @@ const parseHash = () => {
     const parsedHash = new URLSearchParams(hash)
 
     if (parsedHash.has('point')) {
-        let id = parseInt(parsedHash.get('point'), 10)
-        console.log('Обнаружена точка в хэше:', id)
-        layers.points.value.eachLayer((layer) => {
-            if (layer.feature.properties.id == id) {
-                map.value.setView(layer.getLatLng(), 17)
-                layer.fire('click')
-            }
-        })
+        focusLayerById(parsedHash.get('point'), 'points', true)
     }
 
-    // if (parsedHash.has('socket')) {
-    //     console.log('Обнаружена розетка в хэше:', parseInt(parsedHash.get('socket'), 10))
-    //     // map.value.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
-    // }
+    if (parsedHash.has('socket')) {
+        focusLayerById(parsedHash.get('socket'), 'sockets', true)
+    }
 
-    // if (parsedHash.has('route')) {
-    //     console.log('Обнаружен маршрут в хэше:', parseInt(parsedHash.get('route'), 10))
-    //     // map.value.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
-    // }
+    if (parsedHash.has('route')) {
+        focusLayerById(parsedHash.get('route'), 'routes', false)
+    }
 
     if (parsedHash.has('share')) {
         try {
@@ -115,7 +122,7 @@ const parseHash = () => {
             L.geoJSON(parsedData.geoJson, {
                 pmIgnore: true,
                 style: { color: 'red', weight: 3, dashArray: '6, 6' },
-                onEachFeature: (feature, layer) => createPopupForFeature(feature, layer),
+                // onEachFeature: (feature, layer) => createPopupForFeature(feature, layer),
                 pointToLayer: (_, latlng) => L.marker(latlng, { icon: redIcon }),
             }).addTo(map.value)
         } catch (err) {
