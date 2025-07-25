@@ -7,7 +7,7 @@ import 'leaflet-providers/leaflet-providers'
 import '@geoman-io/leaflet-geoman-free'
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css'
 
-import { createPointsLayer, createSocketsLayer, createRoutesLayer, createVeloLayer } from '../helpers/useMapLayers'
+import { createPointsLayer, createSocketsLayer, createRoutesLayer, createBikelanesLayer } from '../helpers/useMapLayers'
 
 import redIcon from '../helpers/RedIcon'
 import { decode } from 'js-base64'
@@ -34,7 +34,20 @@ const layers = {
     points: shallowRef(null),
     sockets: shallowRef(null),
     routes: shallowRef(null),
-    velo: shallowRef(null),
+    bikelanes: shallowRef(null),
+}
+
+const initBaseLayers = () => {
+    return {
+        osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution:
+                '&copy; OpenStreetMap, TG: <a href="https://t.me/+m9ifLDAQddM5ZDEy" target="_blank">Электроклуб Алматы</a>, Велодорожки: <a href="https://velojol.kz" target="_blank">velojol.kz</a>',
+        }),
+        mapbox: L.tileLayer.provider('MapBox', {
+            id: 'vanton/cmcw742a0002m01s945vc1s0n',
+            accessToken: 'pk.eyJ1IjoidmFudG9uIiwiYSI6ImNtY3c2bWo4djA2amcybXBlams0ODI0cHQifQ.-PFTlBSPris_3p7XD29szA',
+        }),
+    }
 }
 
 const handleWizardSelect = () => {
@@ -65,83 +78,63 @@ const handleShareClose = () => {
     currentLayer.value = null
 }
 
-onMounted(function () {
-    map.value = L.map('map').setView([43.226807, 76.904848], 12)
+const parseHash = () => {
+    const hash = window.location.hash.substring(1)
+    if (!hash) return
 
-    L.Icon.Default.prototype.options.iconUrl = markerIconUrl
-    L.Icon.Default.prototype.options.iconRetinaUrl = markerIconRetinaUrl
-    L.Icon.Default.prototype.options.shadowUrl = markerShadowUrl
-    L.Icon.Default.imagePath = ''
+    const parsedHash = new URLSearchParams(hash)
 
-    // Проверяем, есть ли параметр share в URL
-    const onHash = () => {
-        const hash = window.location.hash
-        if (hash) {
-            try {
-                const parsedHash = new URLSearchParams(hash.substring(1))
-                const base64Data = decodeURIComponent(parsedHash.get('share'))
-                const jsonString = decode(base64Data)
-                const parsedData = JSON.parse(jsonString)
-
-                // Показываем компонент FeatureShare с данными
-                shareData.value = parsedData
-                showShare.value = true
-
-                // Редактируемое
-                L.geoJSON(
-                    {
-                        type: 'FeatureCollection',
-                        features: [{ ...parsedData.geoJson }],
-                    },
-                    {
-                        pmIgnore: true,
-                        style: {
-                            color: 'red',
-                            weight: 3,
-                            dashArray: '6, 6',
-                        },
-                        onEachFeature: createPopupForFeature,
-                        pointToLayer: function (feature, latlng) {
-                            return L.marker(latlng, {
-                                icon: redIcon,
-                            })
-                        },
-                    },
-                ).addTo(map.value)
-            } catch (error) {
-                console.error('Ошибка при разборе share ссылки:', error)
+    if (parsedHash.has('point')) {
+        let id = parseInt(parsedHash.get('point'), 10)
+        console.log('Обнаружена точка в хэше:', id)
+        layers.points.value.eachLayer((layer) => {
+            if (layer.feature.properties.id == id) {
+                map.value.setView(layer.getLatLng(), 17)
+                layer.fire('click')
             }
-        }
+        })
     }
 
-    window.addEventListener('hashchange', onHash)
-    onHash()
+    // if (parsedHash.has('socket')) {
+    //     console.log('Обнаружена розетка в хэше:', parseInt(parsedHash.get('socket'), 10))
+    //     // map.value.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
+    // }
 
-    baseLayers.osm.value = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution:
-            '&copy; OpenStreetMap, TG: <a href="https://t.me/+m9ifLDAQddM5ZDEy" target="_blank">Электроклуб Алматы</a>, Велодорожки: <a href="https://velojol.kz" target="_blank">velojol.kz</a>',
-    })
+    // if (parsedHash.has('route')) {
+    //     console.log('Обнаружен маршрут в хэше:', parseInt(parsedHash.get('route'), 10))
+    //     // map.value.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
+    // }
 
-    baseLayers.mapbox.value = L.tileLayer.provider('MapBox', {
-        id: 'vanton/cmcw742a0002m01s945vc1s0n',
-        accessToken: 'pk.eyJ1IjoidmFudG9uIiwiYSI6ImNtY3c2bWo4djA2amcybXBlams0ODI0cHQifQ.-PFTlBSPris_3p7XD29szA',
-    })
+    if (parsedHash.has('share')) {
+        try {
+            const shareBase64 = decodeURIComponent(parsedHash.get('share'))
+            const shareJson = decode(shareBase64)
+            shareData.value = JSON.parse(shareJson)
+            showShare.value = true
 
-    layers.points.value = createPointsLayer()
-    layers.sockets.value = createSocketsLayer()
-    layers.routes.value = createRoutesLayer()
-    layers.velo.value = createVeloLayer()
+            L.geoJSON(parsedData.geoJson, {
+                pmIgnore: true,
+                style: { color: 'red', weight: 3, dashArray: '6, 6' },
+                onEachFeature: (feature, layer) => createPopupForFeature(feature, layer),
+                pointToLayer: (_, latlng) => L.marker(latlng, { icon: redIcon }),
+            }).addTo(map.value)
+        } catch (err) {
+            console.error('Ошибка при разборе share ссылки:', err)
+        }
+    }
+}
 
+onMounted(() => {
+    map.value = L.map('map').setView([43.226807, 76.904848], 12)
     map.value.pm.setLang('ru')
-
     map.value.pm.addControls({
         position: 'topleft',
+        drawMarker: true,
         drawCircleMarker: false,
         drawPolygon: false,
         drawRectangle: false,
         drawCircle: false,
         drawText: false,
-        drawMarker: true,
         rotateMode: false,
         dragMode: false,
         editMode: false,
@@ -149,49 +142,59 @@ onMounted(function () {
         cutPolygon: false,
     })
 
-    map.value.on('pm:create', (e) => {
-        console.log('pm:create event fired', e)
-        currentLayer.value = e.layer
-        showWizard.value = true
-        console.log('showWizard set to:', showWizard.value)
+    L.Icon.Default.mergeOptions({
+        iconUrl: markerIconUrl,
+        iconRetinaUrl: markerIconRetinaUrl,
+        shadowUrl: markerShadowUrl,
     })
 
+    const initializedBaseLayers = initBaseLayers()
+    baseLayers.osm.value = initializedBaseLayers.osm
+    baseLayers.mapbox.value = initializedBaseLayers.mapbox
+
+    layers.points.value = createPointsLayer()
+    layers.sockets.value = createSocketsLayer()
+    layers.routes.value = createRoutesLayer()
+    layers.bikelanes.value = createBikelanesLayer()
+
     baseLayers.osm.value.addTo(map.value)
-    // baseLayers.mapbox.value.addTo(map.value)
     layers.points.value.addTo(map.value)
     layers.sockets.value.addTo(map.value)
     layers.routes.value.addTo(map.value)
-    // Велодорожки по умолчанию выключены
-    // layers.velo.value.addTo(map.value)
 
-    // Панель управления слоями
-    const overlayMaps = {
+    const controlBaseLayers = {
+        OpenStreetMap: baseLayers.osm.value,
+        MapBox: baseLayers.mapbox.value,
+    }
+
+    const controlOverlays = {
         Точки: layers.points.value,
         Розетки: layers.sockets.value,
         Маршруты: layers.routes.value,
-        Велодорожки: layers.velo.value,
+        Велодорожки: layers.bikelanes.value,
     }
 
-    L.control
-        .layers(
-            {
-                OpenStreetMap: baseLayers.osm.value,
-                MapBox: baseLayers.mapbox.value,
-            },
-            overlayMaps,
-            { collapsed: false },
-        )
-        .addTo(map.value)
+    L.control.layers(controlBaseLayers, controlOverlays, { collapsed: false }).addTo(map.value)
+
+    map.value.on('pm:create', (e) => {
+        currentLayer.value = e.layer
+        showWizard.value = true
+    })
+
+    // Подключение hash-ссылки
+    window.addEventListener('hashchange', parseHash)
+    parseHash()
 })
 
 onBeforeUnmount(() => {
     if (map.value) map.value.remove()
-    window.removeEventListener('hashchange', onHash)
+    window.removeEventListener('hashchange', parseHash)
 })
 </script>
 
 <template>
     <div id="map"></div>
+
     <FeatureTypeWizard
         :visible="showWizard"
         :layer="currentLayer"
@@ -199,6 +202,7 @@ onBeforeUnmount(() => {
         @save="handleWizardSave"
         @cancel="handleWizardCancel"
     />
+
     <FeatureShare :visible="showShare" :shareData="shareData" @close="handleShareClose" />
 </template>
 

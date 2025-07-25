@@ -37,20 +37,6 @@ body {
     transition: stroke 0.2s ease-in-out;
 }
 
-.font-bold {
-    font-weight: bold;
-}
-
-.maps-links {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #000;
-}
-.maps-links h3 {
-    margin-top: 0;
-    margin-bottom: 5px;
-}
-
 @media (prefers-color-scheme: light) {
     :root {
         color: #213547;
