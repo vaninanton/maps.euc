@@ -32,7 +32,7 @@
             "properties": {
                 "id": 3,
                 "type": "point",
-                "name": "КБТУ",
+                "name": "КБТУ (Старая площадь)",
                 "description": "Точка сбора, площадка для обучения"
             },
             "geometry": {
