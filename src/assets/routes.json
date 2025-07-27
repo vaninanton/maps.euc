@@ -3194,6 +3194,7 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 17,
                 "type": "route",
                 "name": "Атакент - роща Баума (ВД)",
                 "description": "По велодорожкам"
@@ -3472,6 +3473,7 @@
         {
             "type": "Feature",
             "properties": {
+                "id": 18,
                 "type": "route",
                 "name": "Атакент - роща Баума (ВД+ПЧ)",
                 "description": "По ПЧ"
