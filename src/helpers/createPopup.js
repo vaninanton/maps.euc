@@ -4,7 +4,7 @@ import ymapsIcon from '../assets/ymaps.svg'
 import twoGisIcon from '../assets/2gis.png'
 import shareIcon from '../assets/share.svg'
 
-export default function createPopupContent(feature, layer) {
+export default function createPopup(feature, layer) {
     const { type, name, description, id } = feature.properties ?? {}
     const coordinates = feature.geometry.coordinates
     const isPoint = feature.geometry.type === 'Point'
